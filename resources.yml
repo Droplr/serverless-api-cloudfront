@@ -43,6 +43,7 @@ Resources:
             Cookies:
               Forward: all
           MinTTL: '0'
+          DefaultTTL: '0'
           TargetOriginId: ApiGateway
           ViewerProtocolPolicy: redirect-to-https
         CustomErrorResponses: []
