@@ -1,0 +1,60 @@
+---
+Resources:
+  ApiDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+        - Id: ApiGateway
+          DomainName:
+            Fn::Join:
+              - ""
+              - - Ref: ApiGatewayRestApi
+                - ".execute-api."
+                - Ref: AWS::Region
+                - ".amazonaws.com"
+          CustomOriginConfig:
+            HTTPPort: '80'
+            HTTPSPort: '443'
+            OriginProtocolPolicy: https-only
+            OriginSSLProtocols: [ "TLSv1", "TLSv1.1", "TLSv1.2" ]
+          OriginPath: "/dev"
+        Enabled: true
+        HttpVersion: http2
+        Comment: cdn for api gateway
+        Aliases:
+          - domain.tld
+        PriceClass: PriceClass_All
+        DefaultCacheBehavior:
+          AllowedMethods:
+          - DELETE
+          - GET
+          - HEAD
+          - OPTIONS
+          - PATCH
+          - POST
+          - PUT
+          CachedMethods:
+          - HEAD
+          - GET
+          ForwardedValues:
+            QueryString: true
+            Headers: []
+            Cookies:
+              Forward: all
+          MinTTL: '0'
+          TargetOriginId: ApiGateway
+          ViewerProtocolPolicy: redirect-to-https
+        CustomErrorResponses: []
+        ViewerCertificate:
+          AcmCertificateArn: arn
+          SslSupportMethod: sni-only
+        Logging:
+          IncludeCookies: 'false'
+          Bucket: ''
+          Prefix: ''
+
+Outputs:
+  ApiDistribution:
+    Value:
+      Fn::GetAtt: [ ApiDistribution, DomainName ]

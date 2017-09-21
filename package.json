@@ -1,0 +1,31 @@
+{
+  "name": "serverless-api-cloudfront",
+  "version": "1.0",
+  "engines": {
+    "node": ">=4.0"
+  },
+  "description": "CloudFront distribution in front of your API Gateway",
+  "author": "Droplr, Inc.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Droplr/serverless-api-cloudfront"
+  },
+  "keywords": [
+    "serverless",
+    "serverless plugin",
+    "api gateway",
+    "cloudfront",
+    "api gateway",
+    "lambda",
+    "aws",
+    "aws lambda",
+    "amazon web services",
+    "serverless.com"
+  ],
+  "main": "index.js",
+  "dependencies": {
+    "chalk": "^2.0.0",
+    "lodash": "^4.13.1"
+  }
+}
