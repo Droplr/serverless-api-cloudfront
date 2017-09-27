@@ -17,6 +17,7 @@ Due to limitations of API Gateway Custom Domains, we realized that setting self-
   for serving static files (just set proper Cache-Control in API responses)
 - Much more CloudWatch statistics of API usage (like bandwidth metrics)
 - Real world [access log](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html) - out of the box, API Gateway currently does not provide any kind of real "apache-like" access logs for your invocations
+- [Web Application Firewall](https://aws.amazon.com/waf/) support - enable AWS WAF to protect your API from security threats
 
 ## Installation
 
@@ -44,6 +45,7 @@ custom:
   apiCloudFront:
     domain: my-custom-domain.com
     certificate: arn:aws:acm:us-east-1:000000000000:certificate/00000000-1111-2222-3333-444444444444
+    waf: 00000000-0000-0000-0000-000000000000
     logging:
       bucket: my-bucket.s3.amazonaws.com
       prefix: my-prefix
