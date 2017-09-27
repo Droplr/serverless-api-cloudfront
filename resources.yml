@@ -54,6 +54,7 @@ Resources:
           IncludeCookies: 'false'
           Bucket: ''
           Prefix: ''
+        WebACLId: waf-id
 
 Outputs:
   ApiDistribution:

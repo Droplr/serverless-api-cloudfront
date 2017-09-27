@@ -59,6 +59,7 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareOrigins(distributionConfig);
     this.prepareComment(distributionConfig);
     this.prepareCertificate(distributionConfig);
+    this.prepareWaf(distributionConfig);
   }
 
   prepareLogging(distributionConfig) {
@@ -104,6 +105,16 @@ class ServerlessApiCloudFrontPlugin {
       distributionConfig.ViewerCertificate.AcmCertificateArn = certificate;
     } else {
       delete distributionConfig.ViewerCertificate;
+    }
+  }
+
+  prepareWaf(distributionConfig) {
+    const waf = this.getConfig('waf', null);
+
+    if (waf !== null) {
+      distributionConfig.WebACLId = waf;
+    } else {
+      delete distributionConfig.WebACLId;
     }
   }
 
