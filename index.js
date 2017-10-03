@@ -15,10 +15,11 @@ class ServerlessApiCloudFrontPlugin {
 
   createDeploymentArtifacts() {
     const baseResources = this.serverless.service.provider.compiledCloudFormationTemplate;
-
+    const origDir = process.cwd();
     return this.serverless.yamlParser.parse(
       path.resolve(__dirname, 'resources.yml')
     ).then((resources) => {
+      process.chdir(origDir);
       this.prepareResources(resources);
       return _.merge(baseResources, resources);
     });
