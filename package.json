@@ -26,6 +26,7 @@
   "main": "index.js",
   "dependencies": {
     "chalk": "^2.0.0",
+    "js-yaml": "^3.10.0",
     "lodash": "^4.13.1"
   }
 }
