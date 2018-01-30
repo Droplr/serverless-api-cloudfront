@@ -50,3 +50,13 @@ custom:
       bucket: my-bucket.s3.amazonaws.com
       prefix: my-prefix
 ```
+
+### Notes
+
+* `domain` can be list, so if you want to add more domains, instead string you list multiple ones:
+
+```
+domain:
+  - my-custom-domain.com
+  - secondary-custom-domain.com
+```
