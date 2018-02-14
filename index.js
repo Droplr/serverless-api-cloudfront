@@ -78,7 +78,7 @@ class ServerlessApiCloudFrontPlugin {
     const domain = this.getConfig('domain', null);
 
     if (domain !== null) {
-      distributionConfig.Aliases = [ domain ];
+      distributionConfig.Aliases = Array.isArray(domain) ? domain : [ domain ];
     } else {
       delete distributionConfig.Aliases;
     }
