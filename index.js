@@ -1,6 +1,8 @@
 const path = require('path');
 const _ = require('lodash');
 const chalk = require('chalk');
+const yaml = require('js-yaml');
+const fs = require('fs');
 
 class ServerlessApiCloudFrontPlugin {
   constructor(serverless, options) {
@@ -16,12 +18,14 @@ class ServerlessApiCloudFrontPlugin {
   createDeploymentArtifacts() {
     const baseResources = this.serverless.service.provider.compiledCloudFormationTemplate;
 
-    return this.serverless.yamlParser.parse(
-      path.resolve(__dirname, 'resources.yml')
-    ).then((resources) => {
-      this.prepareResources(resources);
-      return _.merge(baseResources, resources);
+    const filename = path.resolve(__dirname, 'resources.yml');
+    const content = fs.readFileSync(filename, 'utf-8');
+    const resources = yaml.safeLoad(content, {
+      filename: filename
     });
+
+    this.prepareResources(resources);
+    return _.merge(baseResources, resources);
   }
 
   printSummary() {
