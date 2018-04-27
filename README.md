@@ -52,6 +52,9 @@ custom:
     cookies: none
     headers:
       - x-api-key
+    querystring:
+      - page
+      - per_page
 ```
 
 ### Notes
