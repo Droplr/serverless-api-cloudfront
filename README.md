@@ -49,6 +49,7 @@ custom:
     logging:
       bucket: my-bucket.s3.amazonaws.com
       prefix: my-prefix
+    cookies: none
 ```
 
 ### Notes
@@ -59,4 +60,11 @@ custom:
 domain:
   - my-custom-domain.com
   - secondary-custom-domain.com
+```
+
+* `cookies` can be *all* (default), *none* or a list that lists the cookies to whitelist
+```
+cookies:
+  - FirstCookieName
+  - SecondCookieName
 ```
