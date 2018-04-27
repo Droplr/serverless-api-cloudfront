@@ -62,6 +62,7 @@ class ServerlessApiCloudFrontPlugin {
     this.preparePriceClass(distributionConfig);
     this.prepareOrigins(distributionConfig);
     this.prepareCookies(distributionConfig);
+    this.prepareHeaders(distributionConfig);
     this.prepareComment(distributionConfig);
     this.prepareCertificate(distributionConfig);
     this.prepareWaf(distributionConfig);
@@ -105,6 +106,16 @@ class ServerlessApiCloudFrontPlugin {
         distributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames = forwardCookies;
       }
   }
+  
+  prepareHeaders(distributionConfig) {
+      const forwardHeaders = this.getConfig('headers', 'none');
+      
+      if (Array.isArray(forwardHeaders)) {
+        distributionConfig.DefaultCacheBehavior.ForwardedValues.Headers = forwardHeaders;
+      } else {
+        distributionConfig.DefaultCacheBehavior.ForwardedValues.Headers = forwardHeaders === 'none' ? [] : ['*'];
+      }
+    }
 
   prepareComment(distributionConfig) {
     const name = this.serverless.getProvider('aws').naming.getApiGatewayName();
