@@ -64,6 +64,7 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareComment(distributionConfig);
     this.prepareCertificate(distributionConfig);
     this.prepareWaf(distributionConfig);
+    this.prepareCompress(distributionConfig);
   }
 
   prepareLogging(distributionConfig) {
@@ -120,6 +121,10 @@ class ServerlessApiCloudFrontPlugin {
     } else {
       delete distributionConfig.WebACLId;
     }
+  }
+  
+  prepareCompress(distributionConfig) {
+    distributionConfig.DefaultCacheBehavior.Compress = (this.getConfig('compress', false) === true) ? true : false;
   }
 
   getConfig(field, defaultValue) {
