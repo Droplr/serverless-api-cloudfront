@@ -50,6 +50,12 @@ custom:
     logging:
       bucket: my-bucket.s3.amazonaws.com
       prefix: my-prefix
+    cookies: none
+    headers:
+      - x-api-key
+    querystring:
+      - page
+      - per_page
 ```
 
 ### Notes
@@ -60,4 +66,23 @@ custom:
 domain:
   - my-custom-domain.com
   - secondary-custom-domain.com
+```
+
+* `cookies` can be *all* (default), *none* or a list that lists the cookies to whitelist
+```
+cookies:
+  - FirstCookieName
+  - SecondCookieName
+```
+
+* `headers` can be *all*, *none* (default) or a list:
+
+```
+headers: all
+```
+
+* `querystring` can be *all* (default), *none* or a list, in which case all querystring parameters are forwarded, but cache is based on the list:
+
+```
+querystring: all
 ```

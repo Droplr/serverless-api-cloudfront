@@ -61,6 +61,9 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareDomain(distributionConfig);
     this.preparePriceClass(distributionConfig);
     this.prepareOrigins(distributionConfig);
+    this.prepareCookies(distributionConfig);
+    this.prepareHeaders(distributionConfig);
+    this.prepareQueryString(distributionConfig);
     this.prepareComment(distributionConfig);
     this.prepareCertificate(distributionConfig);
     this.prepareWaf(distributionConfig);
@@ -97,6 +100,35 @@ class ServerlessApiCloudFrontPlugin {
   prepareOrigins(distributionConfig) {
     distributionConfig.Origins[0].OriginPath = `/${this.options.stage}`;
   }
+
+  prepareCookies(distributionConfig) {
+      const forwardCookies = this.getConfig('cookies', 'all');
+      distributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.Forward = Array.isArray(forwardCookies) ? 'whitelist' : forwardCookies;
+      if (Array.isArray(forwardCookies)) {
+        distributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames = forwardCookies;
+      }
+  }
+  
+  prepareHeaders(distributionConfig) {
+      const forwardHeaders = this.getConfig('headers', 'none');
+      
+      if (Array.isArray(forwardHeaders)) {
+        distributionConfig.DefaultCacheBehavior.ForwardedValues.Headers = forwardHeaders;
+      } else {
+        distributionConfig.DefaultCacheBehavior.ForwardedValues.Headers = forwardHeaders === 'none' ? [] : ['*'];
+      }
+    }
+
+  prepareQueryString(distributionConfig) {
+        const forwardQueryString = this.getConfig('querystring', 'all');
+        
+        if (Array.isArray(forwardQueryString)) {
+          distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryString = true;
+          distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys = forwardQueryString;
+        } else {
+          distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryString = forwardQueryString === 'all' ? true : false;
+        }
+      }
 
   prepareComment(distributionConfig) {
     const name = this.serverless.getProvider('aws').naming.getApiGatewayName();
