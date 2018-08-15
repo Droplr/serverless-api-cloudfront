@@ -1,3 +1,10 @@
+/**
+ * @Date:   2018-08-15T23:14:31+02:00
+ * @Last modified time: 2018-08-15T23:18:09+02:00
+ */
+
+
+
 const path = require('path');
 const _ = require('lodash');
 const chalk = require('chalk');
@@ -98,7 +105,8 @@ class ServerlessApiCloudFrontPlugin {
   }
 
   prepareOrigins(distributionConfig) {
-    distributionConfig.Origins[0].OriginPath = `/${this.options.stage}`;
+    const originPath = this.getConfig('originPath', `/${this.options.stage}`);
+    distributionConfig.Origins[0].OriginPath = originPath;
   }
 
   prepareCookies(distributionConfig) {
@@ -108,10 +116,10 @@ class ServerlessApiCloudFrontPlugin {
         distributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames = forwardCookies;
       }
   }
-  
+
   prepareHeaders(distributionConfig) {
       const forwardHeaders = this.getConfig('headers', 'none');
-      
+
       if (Array.isArray(forwardHeaders)) {
         distributionConfig.DefaultCacheBehavior.ForwardedValues.Headers = forwardHeaders;
       } else {
@@ -121,7 +129,7 @@ class ServerlessApiCloudFrontPlugin {
 
   prepareQueryString(distributionConfig) {
         const forwardQueryString = this.getConfig('querystring', 'all');
-        
+
         if (Array.isArray(forwardQueryString)) {
           distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryString = true;
           distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys = forwardQueryString;
@@ -154,7 +162,7 @@ class ServerlessApiCloudFrontPlugin {
       delete distributionConfig.WebACLId;
     }
   }
-  
+
   prepareCompress(distributionConfig) {
     distributionConfig.DefaultCacheBehavior.Compress = (this.getConfig('compress', false) === true) ? true : false;
   }
