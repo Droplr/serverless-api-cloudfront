@@ -1,10 +1,3 @@
-/**
- * @Date:   2018-08-15T23:14:31+02:00
- * @Last modified time: 2018-08-15T23:18:09+02:00
- */
-
-
-
 const path = require('path');
 const _ = require('lodash');
 const chalk = require('chalk');
