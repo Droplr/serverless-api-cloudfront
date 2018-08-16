@@ -1,3 +1,10 @@
+/**
+ * @Date:   2018-08-15T23:22:05+02:00
+ * @Last modified time: 2018-08-16T18:23:33+02:00
+ */
+
+
+
 const path = require('path');
 const _ = require('lodash');
 const chalk = require('chalk');
@@ -99,7 +106,12 @@ class ServerlessApiCloudFrontPlugin {
 
   prepareOrigins(distributionConfig) {
     const originPath = this.getConfig('originPath', `/${this.options.stage}`);
-    distributionConfig.Origins[0].OriginPath = originPath;
+
+    if (originPath !== null) {
+      distributionConfig.Origins[0].OriginPath = originPath;
+    } else {
+      delete distributionConfig.Origins[0].OriginPath;
+    }
   }
 
   prepareCookies(distributionConfig) {
