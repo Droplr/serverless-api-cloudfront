@@ -56,6 +56,7 @@ custom:
     querystring:
       - page
       - per_page
+    priceClass: PriceClass_100
 ```
 
 ### Notes
@@ -86,3 +87,12 @@ headers: all
 ```
 querystring: all
 ```
+
+* [`priceClass`][price-class] can be `PriceClass_All` (default), `PriceClass_100` or `PriceClass_200`:
+
+
+```
+priceClass: PriceClass_All
+```
+
+[price-class]: https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetDistributionConfig.html#cloudfront-GetDistributionConfig-response-PriceClass
