@@ -57,6 +57,9 @@ custom:
       - page
       - per_page
     priceClass: PriceClass_100
+    originCustomHeaders:
+      - x-api-key: foo
+      - bar: quux
 ```
 
 ### Notes

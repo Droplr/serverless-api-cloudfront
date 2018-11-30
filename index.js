@@ -98,7 +98,14 @@ class ServerlessApiCloudFrontPlugin {
   }
 
   prepareOrigins(distributionConfig) {
-    distributionConfig.Origins[0].OriginPath = `/${this.options.stage}`;
+    const origin = _.head(distributionConfig.Origins)
+    const originCustomHeaders = this.getConfig('originCustomHeaders', [])
+
+    origin.OriginCustomHeaders = originCustomHeaders
+      .map(_.toPairs)
+      .map(_.head)
+      .map(_.partial(_.zipObject, ['HeaderName', 'HeaderValue']))
+    origin.OriginPath = `/${this.options.stage}`;
   }
 
   prepareCookies(distributionConfig) {
