@@ -57,6 +57,7 @@ custom:
       - page
       - per_page
     priceClass: PriceClass_100
+    minimumProtocolVersion: TLSv1
 ```
 
 ### Notes
@@ -96,3 +97,12 @@ priceClass: PriceClass_All
 ```
 
 [price-class]: https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetDistributionConfig.html#cloudfront-GetDistributionConfig-response-PriceClass
+
+* [`minimumProtocolVersion`][minimum-protocol-version] can be `TLSv1` (default), `TLSv1_2016`, `TLSv1.1_2016`, `TLSv1.2_2018` or `SSLv3`:
+
+
+```
+minimumProtocolVersion: TLSv1
+```
+
+[minimum-protocol-version]: https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ViewerCertificate.html#cloudfront-Type-ViewerCertificate-MinimumProtocolVersion
