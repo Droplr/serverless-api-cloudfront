@@ -68,6 +68,7 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareCertificate(distributionConfig);
     this.prepareWaf(distributionConfig);
     this.prepareCompress(distributionConfig);
+    this.prepareMinimumProtocolVersion(distributionConfig);
   }
 
   prepareLogging(distributionConfig) {
@@ -157,6 +158,14 @@ class ServerlessApiCloudFrontPlugin {
   
   prepareCompress(distributionConfig) {
     distributionConfig.DefaultCacheBehavior.Compress = (this.getConfig('compress', false) === true) ? true : false;
+  }
+
+  prepareMinimumProtocolVersion(distributionConfig) {
+    const minimumProtocolVersion = this.getConfig('minimumProtocolVersion', undefined);
+
+    if (minimumProtocolVersion) {
+      distributionConfig.ViewerCertificate.MinimumProtocolVersion = minimumProtocolVersion;
+    }
   }
 
   getConfig(field, defaultValue) {
