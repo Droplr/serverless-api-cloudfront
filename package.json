@@ -2,7 +2,7 @@
   "name": "serverless-api-cloudfront",
   "version": "0.9.4",
   "engines": {
-    "node": ">=4.0"
+    "node": ">=6.4"
   },
   "description": "CloudFront distribution in front of your API Gateway",
   "author": "Droplr, Inc.",
