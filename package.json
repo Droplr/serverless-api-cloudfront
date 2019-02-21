@@ -1,6 +1,6 @@
 {
   "name": "serverless-api-cloudfront",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "engines": {
     "node": ">=6.4"
   },
