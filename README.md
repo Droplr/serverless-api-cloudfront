@@ -109,3 +109,17 @@ minimumProtocolVersion: TLSv1
 ```
 
 [minimum-protocol-version]: https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ViewerCertificate.html#cloudfront-Type-ViewerCertificate-MinimumProtocolVersion
+
+### IAM Policy
+
+In order to make this plugin work as expected a few additional IAM Policies might be needed on your AWS profile.
+
+More specifically this plugin needs the following policies attached:
+
+* `cloudfront:CreateDistribution`
+* `cloudfront:GetDistribution`
+* `cloudfront:UpdateDistribution`
+* `cloudfront:DeleteDistribution`
+* `cloudfront:TagResource`
+
+You can read more about IAM profiles and policies in the [Serverless documentation](https://serverless.com/framework/docs/providers/aws/guide/credentials#creating-aws-access-keys).
