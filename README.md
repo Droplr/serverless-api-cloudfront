@@ -112,9 +112,9 @@ minimumProtocolVersion: TLSv1
 
 ### IAM Policy
 
-In order to make this plugin work as expected a few additional IAM Policys might be needed on your AWS profile.
+In order to make this plugin work as expected a few additional IAM Policies might be needed on your AWS profile.
 
-More specifically this plugin needs the following policys attached:
+More specifically this plugin needs the following policies attached:
 
 * `cloudfront:CreateDistribution`
 * `cloudfront:GetDistribution`
@@ -122,4 +122,4 @@ More specifically this plugin needs the following policys attached:
 * `cloudfront:DeleteDistribution`
 * `cloudfront:TagResource`
 
-You can read more about IAM profiles and policys in the [Serverless documentation](https://serverless.com/framework/docs/providers/aws/guide/credentials#creating-aws-access-keys).
+You can read more about IAM profiles and policies in the [Serverless documentation](https://serverless.com/framework/docs/providers/aws/guide/credentials#creating-aws-access-keys).
