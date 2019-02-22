@@ -112,7 +112,7 @@ minimumProtocolVersion: TLSv1
 
 ### IAM Policy
 
-In order to make this plugin work as expected a few additional IAM Policys might be needed on your AwS profile.
+In order to make this plugin work as expected a few additional IAM Policys might be needed on your AWS profile.
 
 More specifically this plugin needs the following policys attached:
 
