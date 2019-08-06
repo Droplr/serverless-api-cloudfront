@@ -103,6 +103,7 @@ priceClass: PriceClass_All
 
 * [`minimumProtocolVersion`][minimum-protocol-version] can be `TLSv1` (default), `TLSv1_2016`, `TLSv1.1_2016`, `TLSv1.2_2018` or `SSLv3`:
 
+* Error troubleshooting : make sure you have at least one http event otherwise you'll get ```The CloudFormation template is invalid: Template format error: Unresolved resource dependencies [ApiGatewayRestApi] in the Resources block of the template```
 
 ```
 minimumProtocolVersion: TLSv1
