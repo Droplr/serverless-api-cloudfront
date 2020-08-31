@@ -69,6 +69,7 @@ class ServerlessApiCloudFrontPlugin {
     this.prepareWaf(distributionConfig);
     this.prepareCompress(distributionConfig);
     this.prepareMinimumProtocolVersion(distributionConfig);
+    this.prepareViewerProtocolPolicy(distributionConfig);
   }
 
   prepareLogging(distributionConfig) {
@@ -119,6 +120,11 @@ class ServerlessApiCloudFrontPlugin {
         distributionConfig.DefaultCacheBehavior.ForwardedValues.Headers = forwardHeaders === 'none' ? [] : ['*'];
       }
     }
+  
+  prepareViewerProtocolPolicy(distributionConfig) {
+      const viewerProtocolPolicy = this.getConfig('viewerProtocolPolicy', 'https-only');
+      distributionConfig.DefaultCacheBehavior.ViewerProtocolPolicy = viewerProtocolPolicy
+  }
 
   prepareQueryString(distributionConfig) {
         const forwardQueryString = this.getConfig('querystring', 'all');
