@@ -85,11 +85,27 @@ class ServerlessApiCloudFrontPlugin {
 
   prepareDomain(distributionConfig) {
     const domain = this.getConfig('domain', null);
+    const httpApi = this.getConfig("httpApi", false);
 
     if (domain !== null) {
       distributionConfig.Aliases = Array.isArray(domain) ? domain : [ domain ];
     } else {
       delete distributionConfig.Aliases;
+    }
+    distributionConfig.Origins[0].DomainName = {
+      "Fn::Join": [
+        "",
+        [
+          {
+            Ref: httpApi && "HttpApi" || "ApiGatewayRestApi"
+          },
+          ".execute-api.",
+          {
+            "Ref": "AWS::Region"
+          },
+          ".amazonaws.com"
+        ]
+      ]
     }
   }
 
@@ -99,7 +115,8 @@ class ServerlessApiCloudFrontPlugin {
   }
 
   prepareOrigins(distributionConfig) {
-    distributionConfig.Origins[0].OriginPath = `/${this.options.stage}`;
+    const httpApi = this.getConfig("httpApi", false);
+    distributionConfig.Origins[0].OriginPath = httpApi ? "" : `/${this.options.stage}`;
   }
 
   prepareCookies(distributionConfig) {

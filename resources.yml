@@ -6,13 +6,6 @@ Resources:
       DistributionConfig:
         Origins:
         - Id: ApiGateway
-          DomainName:
-            Fn::Join:
-              - ""
-              - - Ref: ApiGatewayRestApi
-                - ".execute-api."
-                - Ref: AWS::Region
-                - ".amazonaws.com"
           CustomOriginConfig:
             HTTPPort: '80'
             HTTPSPort: '443'
