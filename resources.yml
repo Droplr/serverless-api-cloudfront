@@ -5,7 +5,7 @@ Resources:
     Properties:
       DistributionConfig:
         Origins:
-          - Id: ApiGateway
+          - Id: LambdaUrl
             DomainName:
               Fn::Select:
                 [
@@ -50,7 +50,7 @@ Resources:
               Forward: all
           MinTTL: '0'
           DefaultTTL: '0'
-          TargetOriginId: ApiGateway
+          TargetOriginId: LambdaUrl
           ViewerProtocolPolicy: redirect-to-https
         CustomErrorResponses: []
         ViewerCertificate:
