@@ -1,23 +1,21 @@
 {
-  "name": "serverless-api-cloudfront",
-  "version": "0.9.5",
+  "name": "serverless-lambda-cloudfront",
+  "version": "0.0.1",
   "engines": {
     "node": ">=6.4"
   },
   "description": "CloudFront distribution in front of your API Gateway",
-  "author": "Droplr, Inc.",
+  "author": "t2tx",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Droplr/serverless-api-cloudfront"
+    "url": "https://github.com/t2tx/serverless-lambda-cloudfront"
   },
   "keywords": [
     "serverless",
     "serverless plugin",
-    "api gateway",
     "cloudfront",
-    "api gateway",
-    "lambda",
+    "lambda url",
     "aws",
     "aws lambda",
     "amazon web services",

@@ -4,24 +4,26 @@ const chalk = require('chalk');
 const yaml = require('js-yaml');
 const fs = require('fs');
 
-class ServerlessApiCloudFrontPlugin {
+class ServerlessLambdaCloudFrontPlugin {
   constructor(serverless, options) {
     this.serverless = serverless;
     this.options = options;
 
     this.hooks = {
-      'before:deploy:createDeploymentArtifacts': this.createDeploymentArtifacts.bind(this),
+      'before:package:createDeploymentArtifacts':
+        this.createDeploymentArtifacts.bind(this),
       'aws:info:displayStackOutputs': this.printSummary.bind(this),
     };
   }
 
   createDeploymentArtifacts() {
-    const baseResources = this.serverless.service.provider.compiledCloudFormationTemplate;
+    const baseResources =
+      this.serverless.service.provider.compiledCloudFormationTemplate;
 
     const filename = path.resolve(__dirname, 'resources.yml');
     const content = fs.readFileSync(filename, 'utf-8');
-    const resources = yaml.safeLoad(content, {
-      filename: filename
+    const resources = yaml.load(content, {
+      filename: filename,
     });
 
     this.prepareResources(resources);
@@ -31,9 +33,12 @@ class ServerlessApiCloudFrontPlugin {
   printSummary() {
     const cloudTemplate = this.serverless;
 
-    const awsInfo = _.find(this.serverless.pluginManager.getPlugins(), (plugin) => {
-      return plugin.constructor.name === 'AwsInfo';
-    });
+    const awsInfo = _.find(
+      this.serverless.pluginManager.getPlugins(),
+      (plugin) => {
+        return plugin.constructor.name === 'AwsInfo';
+      },
+    );
 
     if (!awsInfo || !awsInfo.gatheredData) {
       return;
@@ -45,17 +50,20 @@ class ServerlessApiCloudFrontPlugin {
     });
 
     if (!apiDistributionDomain || !apiDistributionDomain.OutputValue) {
-      return ;
+      return;
     }
 
     const cnameDomain = this.getConfig('domain', '-');
 
     this.serverless.cli.consoleLog(chalk.yellow('CloudFront domain name'));
-    this.serverless.cli.consoleLog(`  ${apiDistributionDomain.OutputValue} (CNAME: ${cnameDomain})`);
+    this.serverless.cli.consoleLog(
+      `  ${apiDistributionDomain.OutputValue} (CNAME: ${cnameDomain})`,
+    );
   }
 
   prepareResources(resources) {
-    const distributionConfig = resources.Resources.ApiDistribution.Properties.DistributionConfig;
+    const distributionConfig =
+      resources.Resources.ApiDistribution.Properties.DistributionConfig;
 
     this.prepareLogging(distributionConfig);
     this.prepareDomain(distributionConfig);
@@ -77,7 +85,6 @@ class ServerlessApiCloudFrontPlugin {
     if (loggingBucket !== null) {
       distributionConfig.Logging.Bucket = loggingBucket;
       distributionConfig.Logging.Prefix = this.getConfig('logging.prefix', '');
-
     } else {
       delete distributionConfig.Logging;
     }
@@ -87,7 +94,7 @@ class ServerlessApiCloudFrontPlugin {
     const domain = this.getConfig('domain', null);
 
     if (domain !== null) {
-      distributionConfig.Aliases = Array.isArray(domain) ? domain : [ domain ];
+      distributionConfig.Aliases = Array.isArray(domain) ? domain : [domain];
     } else {
       delete distributionConfig.Aliases;
     }
@@ -99,37 +106,49 @@ class ServerlessApiCloudFrontPlugin {
   }
 
   prepareOrigins(distributionConfig) {
+    let lambda = this.getConfig('lambda', 'Index');
+    lambda = lambda.charAt(0).toUpperCase() + lambda.slice(1);
+    distributionConfig.Origins[0].DomainName['Fn::Select'][1]['Fn::Split'][1][
+      'Fn::GetAtt'
+    ][0] = `${lambda}LambdaFunctionUrl`;
+
     distributionConfig.Origins[0].OriginPath = `/${this.options.stage}`;
   }
 
   prepareCookies(distributionConfig) {
-      const forwardCookies = this.getConfig('cookies', 'all');
-      distributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.Forward = Array.isArray(forwardCookies) ? 'whitelist' : forwardCookies;
-      if (Array.isArray(forwardCookies)) {
-        distributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames = forwardCookies;
-      }
-  }
-  
-  prepareHeaders(distributionConfig) {
-      const forwardHeaders = this.getConfig('headers', 'none');
-      
-      if (Array.isArray(forwardHeaders)) {
-        distributionConfig.DefaultCacheBehavior.ForwardedValues.Headers = forwardHeaders;
-      } else {
-        distributionConfig.DefaultCacheBehavior.ForwardedValues.Headers = forwardHeaders === 'none' ? [] : ['*'];
-      }
+    const forwardCookies = this.getConfig('cookies', 'all');
+    distributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.Forward =
+      Array.isArray(forwardCookies) ? 'whitelist' : forwardCookies;
+    if (Array.isArray(forwardCookies)) {
+      distributionConfig.DefaultCacheBehavior.ForwardedValues.Cookies.WhitelistedNames =
+        forwardCookies;
     }
+  }
+
+  prepareHeaders(distributionConfig) {
+    const forwardHeaders = this.getConfig('headers', 'none');
+
+    if (Array.isArray(forwardHeaders)) {
+      distributionConfig.DefaultCacheBehavior.ForwardedValues.Headers =
+        forwardHeaders;
+    } else {
+      distributionConfig.DefaultCacheBehavior.ForwardedValues.Headers =
+        forwardHeaders === 'none' ? [] : ['*'];
+    }
+  }
 
   prepareQueryString(distributionConfig) {
-        const forwardQueryString = this.getConfig('querystring', 'all');
-        
-        if (Array.isArray(forwardQueryString)) {
-          distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryString = true;
-          distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys = forwardQueryString;
-        } else {
-          distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryString = forwardQueryString === 'all' ? true : false;
-        }
-      }
+    const forwardQueryString = this.getConfig('querystring', 'all');
+
+    if (Array.isArray(forwardQueryString)) {
+      distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryString = true;
+      distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryStringCacheKeys =
+        forwardQueryString;
+    } else {
+      distributionConfig.DefaultCacheBehavior.ForwardedValues.QueryString =
+        forwardQueryString === 'all' ? true : false;
+    }
+  }
 
   prepareComment(distributionConfig) {
     const name = this.serverless.getProvider('aws').naming.getApiGatewayName();
@@ -155,22 +174,31 @@ class ServerlessApiCloudFrontPlugin {
       delete distributionConfig.WebACLId;
     }
   }
-  
+
   prepareCompress(distributionConfig) {
-    distributionConfig.DefaultCacheBehavior.Compress = (this.getConfig('compress', false) === true) ? true : false;
+    distributionConfig.DefaultCacheBehavior.Compress =
+      this.getConfig('compress', false) === true ? true : false;
   }
 
   prepareMinimumProtocolVersion(distributionConfig) {
-    const minimumProtocolVersion = this.getConfig('minimumProtocolVersion', undefined);
+    const minimumProtocolVersion = this.getConfig(
+      'minimumProtocolVersion',
+      undefined,
+    );
 
     if (minimumProtocolVersion) {
-      distributionConfig.ViewerCertificate.MinimumProtocolVersion = minimumProtocolVersion;
+      distributionConfig.ViewerCertificate.MinimumProtocolVersion =
+        minimumProtocolVersion;
     }
   }
 
   getConfig(field, defaultValue) {
-    return _.get(this.serverless, `service.custom.apiCloudFront.${field}`, defaultValue)
+    return _.get(
+      this.serverless,
+      `service.custom.lambdaCloudFront.${field}`,
+      defaultValue,
+    );
   }
 }
 
-module.exports = ServerlessApiCloudFrontPlugin;
+module.exports = ServerlessLambdaCloudFrontPlugin;

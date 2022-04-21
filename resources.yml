@@ -5,20 +5,26 @@ Resources:
     Properties:
       DistributionConfig:
         Origins:
-        - Id: ApiGateway
-          DomainName:
-            Fn::Join:
-              - ""
-              - - Ref: ApiGatewayRestApi
-                - ".execute-api."
-                - Ref: AWS::Region
-                - ".amazonaws.com"
-          CustomOriginConfig:
-            HTTPPort: '80'
-            HTTPSPort: '443'
-            OriginProtocolPolicy: https-only
-            OriginSSLProtocols: [ "TLSv1", "TLSv1.1", "TLSv1.2" ]
-          OriginPath: "/dev"
+          - Id: ApiGateway
+            DomainName:
+              Fn::Select:
+                [
+                  2,
+                  Fn::Split:
+                    ["/", Fn::GetAtt: [IndexLambdaFunctionUrl, FunctionUrl]],
+                ]
+              # Fn::Join:
+              #   - ""
+              #   - - Ref: ApiGatewayRestApi
+              #     - ".execute-api."
+              #     - Ref: AWS::Region
+              #     - ".amazonaws.com"
+            CustomOriginConfig:
+              HTTPPort: "80"
+              HTTPSPort: "443"
+              OriginProtocolPolicy: https-only
+              OriginSSLProtocols: ["TLSv1", "TLSv1.1", "TLSv1.2"]
+            OriginPath: "/dev"
         Enabled: true
         HttpVersion: http2
         Comment: cdn for api gateway
@@ -27,23 +33,23 @@ Resources:
         PriceClass: PriceClass_All
         DefaultCacheBehavior:
           AllowedMethods:
-          - DELETE
-          - GET
-          - HEAD
-          - OPTIONS
-          - PATCH
-          - POST
-          - PUT
+            - DELETE
+            - GET
+            - HEAD
+            - OPTIONS
+            - PATCH
+            - POST
+            - PUT
           CachedMethods:
-          - HEAD
-          - GET
+            - HEAD
+            - GET
           ForwardedValues:
             QueryString: true
             Headers: []
             Cookies:
               Forward: all
-          MinTTL: '0'
-          DefaultTTL: '0'
+          MinTTL: "0"
+          DefaultTTL: "0"
           TargetOriginId: ApiGateway
           ViewerProtocolPolicy: redirect-to-https
         CustomErrorResponses: []
@@ -51,12 +57,12 @@ Resources:
           AcmCertificateArn: arn
           SslSupportMethod: sni-only
         Logging:
-          IncludeCookies: 'false'
-          Bucket: ''
-          Prefix: ''
+          IncludeCookies: "false"
+          Bucket: ""
+          Prefix: ""
         WebACLId: waf-id
 
 Outputs:
   ApiDistribution:
     Value:
-      Fn::GetAtt: [ ApiDistribution, DomainName ]
+      Fn::GetAtt: [ApiDistribution, DomainName]
