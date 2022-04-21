@@ -11,7 +11,7 @@ Resources:
                 [
                   2,
                   Fn::Split:
-                    ["/", Fn::GetAtt: [IndexLambdaFunctionUrl, FunctionUrl]],
+                    ['/', Fn::GetAtt: [IndexLambdaFunctionUrl, FunctionUrl]],
                 ]
               # Fn::Join:
               #   - ""
@@ -20,11 +20,11 @@ Resources:
               #     - Ref: AWS::Region
               #     - ".amazonaws.com"
             CustomOriginConfig:
-              HTTPPort: "80"
-              HTTPSPort: "443"
+              HTTPPort: '80'
+              HTTPSPort: '443'
               OriginProtocolPolicy: https-only
-              OriginSSLProtocols: ["TLSv1", "TLSv1.1", "TLSv1.2"]
-            OriginPath: "/dev"
+              OriginSSLProtocols: ['TLSv1', 'TLSv1.1', 'TLSv1.2']
+            OriginPath: ''
         Enabled: true
         HttpVersion: http2
         Comment: cdn for api gateway
@@ -48,8 +48,8 @@ Resources:
             Headers: []
             Cookies:
               Forward: all
-          MinTTL: "0"
-          DefaultTTL: "0"
+          MinTTL: '0'
+          DefaultTTL: '0'
           TargetOriginId: ApiGateway
           ViewerProtocolPolicy: redirect-to-https
         CustomErrorResponses: []
@@ -57,9 +57,9 @@ Resources:
           AcmCertificateArn: arn
           SslSupportMethod: sni-only
         Logging:
-          IncludeCookies: "false"
-          Bucket: ""
-          Prefix: ""
+          IncludeCookies: 'false'
+          Bucket: ''
+          Prefix: ''
         WebACLId: waf-id
 
 Outputs:

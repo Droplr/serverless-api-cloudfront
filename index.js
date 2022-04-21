@@ -111,8 +111,6 @@ class ServerlessLambdaCloudFrontPlugin {
     distributionConfig.Origins[0].DomainName['Fn::Select'][1]['Fn::Split'][1][
       'Fn::GetAtt'
     ][0] = `${lambda}LambdaFunctionUrl`;
-
-    distributionConfig.Origins[0].OriginPath = `/${this.options.stage}`;
   }
 
   prepareCookies(distributionConfig) {
