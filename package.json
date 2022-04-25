@@ -1,10 +1,10 @@
 {
   "name": "serverless-lambda-cloudfront",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "node": ">=6.4"
   },
-  "description": "CloudFront distribution in front of your API Gateway",
+  "description": "CloudFront distribution in front of your Lambda Url",
   "author": "t2tx",
   "license": "MIT",
   "repository": {
