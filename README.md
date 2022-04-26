@@ -62,6 +62,7 @@ custom:
 
 functions:
   myFunction:
+    url: true
     ...
 
 ```
