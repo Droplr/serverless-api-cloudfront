@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.0.5] - 2022-05-01
+
+### Fixed
+
+- add peerDependencies
+
+### Updated
+
+- README
+
 ## [0.0.2] - 2022-04-21
 
 ### Fixed

@@ -2,7 +2,7 @@
 
 [![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
 [![npm version](https://badge.fury.io/js/serverless-lambda-cloudfront.svg)](https://badge.fury.io/js/serverless-lambda-cloudfront)
-[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/Droplr/serverless-lambda-cloudfront/master/LICENSE)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/serverless-lambda-cloudfront/master/LICENSE)
 [![npm downloads](https://img.shields.io/npm/dt/serverless-lambda-cloudfront.svg?style=flat)](https://www.npmjs.com/package/serverless-lambda-cloudfront)
 
 Automatically creates properly configured AWS CloudFront distribution that routes traffic
@@ -11,6 +11,7 @@ to Lambda Url.
 **:zap: Pros**
 
 - Allows you to set-up custom domain for your Lambda Url
+  - [Lambda Url](https://www.serverless.com/blog/aws-lambda-function-urls-with-serverless-framework)
 - Enables CDN caching of resources - so you don't waste Lambda invocations
   for serving static files (just set proper Cache-Control in API responses)
 - Much more CloudWatch statistics of API usage (like bandwidth metrics)
@@ -62,6 +63,7 @@ custom:
 
 functions:
   myFunction:
+    url: true
     ...
 
 ```
