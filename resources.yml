@@ -5,20 +5,26 @@ Resources:
     Properties:
       DistributionConfig:
         Origins:
-        - Id: ApiGateway
-          DomainName:
-            Fn::Join:
-              - ""
-              - - Ref: ApiGatewayRestApi
-                - ".execute-api."
-                - Ref: AWS::Region
-                - ".amazonaws.com"
-          CustomOriginConfig:
-            HTTPPort: '80'
-            HTTPSPort: '443'
-            OriginProtocolPolicy: https-only
-            OriginSSLProtocols: [ "TLSv1", "TLSv1.1", "TLSv1.2" ]
-          OriginPath: "/dev"
+          - Id: LambdaUrl
+            DomainName:
+              Fn::Select:
+                [
+                  2,
+                  Fn::Split:
+                    ['/', Fn::GetAtt: [IndexLambdaFunctionUrl, FunctionUrl]],
+                ]
+              # Fn::Join:
+              #   - ""
+              #   - - Ref: ApiGatewayRestApi
+              #     - ".execute-api."
+              #     - Ref: AWS::Region
+              #     - ".amazonaws.com"
+            CustomOriginConfig:
+              HTTPPort: '80'
+              HTTPSPort: '443'
+              OriginProtocolPolicy: https-only
+              OriginSSLProtocols: ['TLSv1', 'TLSv1.1', 'TLSv1.2']
+            OriginPath: ''
         Enabled: true
         HttpVersion: http2
         Comment: cdn for api gateway
@@ -27,16 +33,16 @@ Resources:
         PriceClass: PriceClass_All
         DefaultCacheBehavior:
           AllowedMethods:
-          - DELETE
-          - GET
-          - HEAD
-          - OPTIONS
-          - PATCH
-          - POST
-          - PUT
+            - DELETE
+            - GET
+            - HEAD
+            - OPTIONS
+            - PATCH
+            - POST
+            - PUT
           CachedMethods:
-          - HEAD
-          - GET
+            - HEAD
+            - GET
           ForwardedValues:
             QueryString: true
             Headers: []
@@ -44,7 +50,7 @@ Resources:
               Forward: all
           MinTTL: '0'
           DefaultTTL: '0'
-          TargetOriginId: ApiGateway
+          TargetOriginId: LambdaUrl
           ViewerProtocolPolicy: redirect-to-https
         CustomErrorResponses: []
         ViewerCertificate:
@@ -59,4 +65,4 @@ Resources:
 Outputs:
   ApiDistribution:
     Value:
-      Fn::GetAtt: [ ApiDistribution, DomainName ]
+      Fn::GetAtt: [ApiDistribution, DomainName]
