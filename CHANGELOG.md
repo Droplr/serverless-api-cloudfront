@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.0.6] - 2022-05-04
+
+### Fixed
+
+- serverless version of peerDependencies
+
+### Updated
+
+- Throw exception when the lambda parameter is not set.
+
 ## [0.0.5] - 2022-05-01
 
 ### Fixed

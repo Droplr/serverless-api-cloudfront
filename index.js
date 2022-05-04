@@ -4,6 +4,8 @@ const chalk = require('chalk');
 const yaml = require('js-yaml');
 const fs = require('fs');
 
+const TAG = '[serverless-lambda-cloudfront]';
+
 class ServerlessLambdaCloudFrontPlugin {
   constructor(serverless, options) {
     this.serverless = serverless;
@@ -106,7 +108,10 @@ class ServerlessLambdaCloudFrontPlugin {
   }
 
   prepareOrigins(distributionConfig) {
-    let lambda = this.getConfig('lambda', 'Index');
+    let lambda = this.getConfig('lambda', '');
+    if (!lambda) {
+      throw `${TAG} Error: lambda must be set`;
+    }
     lambda = lambda.charAt(0).toUpperCase() + lambda.slice(1);
     distributionConfig.Origins[0].DomainName['Fn::Select'][1]['Fn::Split'][1][
       'Fn::GetAtt'
