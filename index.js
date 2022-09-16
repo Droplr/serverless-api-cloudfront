@@ -9,8 +9,11 @@ class ServerlessApiCloudFrontPlugin {
     this.serverless = serverless;
     this.options = options;
 
+    // bind to a specific provider
+    this.provider = serverless.getProvider('aws');
+
     this.hooks = {
-      'before:deploy:createDeploymentArtifacts': this.createDeploymentArtifacts.bind(this),
+      'before:package:createDeploymentArtifacts': this.createDeploymentArtifacts.bind(this),
       'aws:info:displayStackOutputs': this.printSummary.bind(this),
     };
   }
@@ -20,7 +23,7 @@ class ServerlessApiCloudFrontPlugin {
 
     const filename = path.resolve(__dirname, 'resources.yml');
     const content = fs.readFileSync(filename, 'utf-8');
-    const resources = yaml.safeLoad(content, {
+    const resources = yaml.load(content, {
       filename: filename
     });
 
